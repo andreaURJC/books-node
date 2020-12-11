@@ -1,0 +1,136 @@
+{
+	"variables": [],
+	"info": {
+		"name": "node-books",
+		"_postman_id": "6233cf19-8b3a-0a2f-84a2-13c5f2292226",
+		"description": "",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "GET books",
+			"request": {
+				"url": "{{baseUrl}}/books",
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"description": "Get all books"
+			},
+			"response": []
+		},
+		{
+			"name": "GET book ",
+			"request": {
+				"url": {
+					"raw": "{{baseUrl}}/books/1",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"books",
+						"1"
+					],
+					"query": [
+						{
+							"key": "",
+							"value": "",
+							"equals": true,
+							"description": "",
+							"disabled": true
+						}
+					],
+					"variable": []
+				},
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"description": "Get book for its id"
+			},
+			"response": []
+		},
+		{
+			"name": "POST book",
+			"request": {
+				"url": "{{baseUrl}}/books",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"title\": \"El Lazarillo de Tormes\",\n    \"summary\": \"El libro Lazarillo de Tormes retrata la evolución de su protagonista, desde que es un joven ignorante hasta que se convierte en un pícaro astuto que engaña a sus dueños para poder comer y bebe\",\n    \"postYear\": 1554,\n    \"author\": \"Desconocido\"\n}"
+				},
+				"description": "Create new book "
+			},
+			"response": []
+		},
+		{
+			"name": "DELETE book",
+			"request": {
+				"url": "{{baseUrl}}/books/1",
+				"method": "DELETE",
+				"header": [],
+				"body": {},
+				"description": "Delete book by its id"
+			},
+			"response": []
+		},
+		{
+			"name": "GET comments",
+			"request": {
+				"url": "{{baseUrl}}/comments",
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"description": "Get all comments"
+			},
+			"response": []
+		},
+		{
+			"name": "GET comment by id",
+			"request": {
+				"url": "{{baseUrl}}/comments/1",
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"description": "Get comment by id"
+			},
+			"response": []
+		},
+		{
+			"name": "DELETE comment",
+			"request": {
+				"url": "{{baseUrl}}/comments/1",
+				"method": "DELETE",
+				"header": [],
+				"body": {},
+				"description": "Delete comment by id"
+			},
+			"response": []
+		},
+		{
+			"name": "POST comment",
+			"request": {
+				"url": "{{baseUrl}}/comments/1",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"author\": \"Ana\",\n    \"text\": \"Lei el libro cuando era pequeña, ya no lo recuerdo.\",\n    \"score\": 2\n}"
+				},
+				"description": "Create new comment"
+			},
+			"response": []
+		}
+	]
+}
