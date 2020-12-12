@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 var commentSchema = new mongoose.Schema({
     bookId: Number,
+    commentId: Number,
     user: String,
     text: String,
     score: Number

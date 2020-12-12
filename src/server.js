@@ -47,13 +47,15 @@ function initSomeBooks() {
         });
 
     Comment.create({
-            bookId: 1,
-            user: "Andrea",
-            text: "Me ha gustado mucho",
-            score: 2
-        });
+        bookId: 1,
+        commentId: 1,
+        user: "Andrea",
+        text: "Me ha gustado mucho",
+        score: 2
+    });
     Comment.create({
         bookId: 2,
+        commentId: 2,
         user: "Juanma",
         text: "Me ha gustado mucho, pero no lo recomiendo.",
         score: 5
