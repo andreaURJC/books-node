@@ -2,7 +2,7 @@
   "name": "Books",
   "version": "1.0.0",
   "description": "",
-  "main": "src/app.js",
+  "main": "src/server.js",
   "keywords": [],
   "author": "",
   "license": "ISC",
