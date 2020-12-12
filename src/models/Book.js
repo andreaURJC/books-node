@@ -5,8 +5,13 @@ var bookSchema = new mongoose.Schema({
     summary: String,
     postYear: Number,
     author: String,
-    publisher: String
-
+    publisher: String,
+    comments: [{
+        bookId: Number,
+        user: String,
+        text: String,
+        score: Number
+    }]
 }, {versionKey: false});
 
 //Definimos el modelo y el esquema
