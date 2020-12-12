@@ -8,32 +8,7 @@ const comments = new Map();
 let nextId = 1;
 let nextCommentId = 1;
 
-addBook({
-    title: 'Don Quijote de la Mancha',
-    summary: 'Las andanzas de Don Quijote y Sancho Panza.',
-    postYear: 1700,
-    author: 'Miguel de Cervantes',
-    comments: []
-})
-addBook({
-    title: 'El principito',
-    summary: 'El principito es una novela corta y la obra más famosa del escritor y aviador francés Antoine de Saint-Exupéry',
-    postYear: 1943,
-    author: 'Antoine de Saint-Exupéry',
-    comments: []
-})
-
-addComment({
-    author: 'Andrea',
-    text: 'Me ha gustado mucho este libro.',
-    score: 5
-}, 1);
-
-addComment({
-    author: 'Juanma',
-    text: 'Me ha parecido un rollo terrible.',
-    score: 0
-}, 2);
+init();
 
 //GET books
 router.get('/books', ((req, res) =>
@@ -134,6 +109,7 @@ router.post('/comments/:bookId', (req, res) => {
             };
 
             addComment(comment,req.params.bookId);
+            //TODO: revisar
             res.location(fullUrl(req));
             res.json(comment);
         }
@@ -148,6 +124,7 @@ function addBook(book) {
     books.set(book.id, book);
 }
 
+// Validations:
 function validBook(book) {
     return typeof book.title == 'string' && typeof book.summary == 'string' && typeof book.author == 'string';
 }
@@ -174,7 +151,6 @@ function addComment(comment, bookId) {
     comments.set(comment.id, comment);
 }
 
-
 function getComments(bookId) {
     books.get(bookId).comments = [];
     comments.forEach((comment) => {
@@ -182,6 +158,35 @@ function getComments(bookId) {
             books.get(bookId).comments.push(comment);
         }
     });
+}
+
+function init() {
+    addBook({
+        title: 'Don Quijote de la Mancha',
+        summary: 'Las andanzas de Don Quijote y Sancho Panza.',
+        postYear: 1700,
+        author: 'Miguel de Cervantes',
+        comments: []
+    })
+    addBook({
+        title: 'El principito',
+        summary: 'El principito es una novela corta y la obra más famosa del escritor y aviador francés Antoine de Saint-Exupéry',
+        postYear: 1943,
+        author: 'Antoine de Saint-Exupéry',
+        comments: []
+    })
+
+    addComment({
+        author: 'Andrea',
+        text: 'Me ha gustado mucho este libro.',
+        score: 5
+    }, 1);
+
+    addComment({
+        author: 'Juanma',
+        text: 'Me ha parecido un rollo terrible.',
+        score: 0
+    }, 2);
 }
 
 module.exports = router;
