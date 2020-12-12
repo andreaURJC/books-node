@@ -8,6 +8,7 @@ var bookSchema = new mongoose.Schema({
     publisher: String,
     comments: [{
         bookId: Number,
+        commentId: Number,
         user: String,
         text: String,
         score: Number

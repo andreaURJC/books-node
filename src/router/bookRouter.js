@@ -68,6 +68,7 @@ bookRouter.route('/books/:bookId')
     });
 
 bookRouter.route('/comments')
+    //GET comments
     .get(function (req, res) {
         Comment.find(function (err, comments) {
             if (err) {
@@ -79,6 +80,7 @@ bookRouter.route('/comments')
     });
 
 bookRouter.route("/books/:bookId/comments")
+    //POST comment at bookId
     .post(function (req, res) {
         var commentId = 0;
         //Comprueba que el libro existe
@@ -107,6 +109,38 @@ bookRouter.route("/books/:bookId/comments")
                         }
                         res.status(200).jsonp(comment);
                     })
+                })
+            } else {
+                res.status(404).send("Book at id " + req.params.bookId + " not found");
+            }
+        });
+    });
+
+bookRouter.route("/books/:bookId/comments/:commentId")
+    //DELETE comment of a book
+    .delete(function (req, res) {
+        //Comprueba que el libro existe
+        Book.findOne({bookId: req.params.bookId}, function (err, book) {
+            if (err) {
+                res.status(500).send("This book doesn't exist.");
+            }
+            if (book != null) {
+                //Comprueba si el comentario existe en base de datos
+                Comment.findOne({bookId: req.params.commentId}, function (err, comment) {
+                    if (err) {
+                        res.status(500).send("This comment doesn't exist.");
+                    }
+                    //Borra el comentario
+                    if (comment != null) {
+                        comment.delete(function (err, comment) {
+                            if (err) {
+                                res.status(500).send("Cannot delete comment");
+                            }
+                            res.status(200).jsonp(comment);
+                        })
+                    } else {
+                        res.status(404).send("Comment at id " + req.params.commentId + " not found");
+                    }
                 })
             } else {
                 res.status(404).send("Book at id " + req.params.bookId + " not found");
