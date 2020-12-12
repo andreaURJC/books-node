@@ -6,7 +6,8 @@ const bookRouter = express.Router();
 const app = express();
 
 bookRouter.route('/books')
-    .get(bookController.findAllBooks);
+    .get(bookController.findAllBooks)
+    .post(bookController.addBook);
 
 bookRouter.route('/books/:bookId')
     .get(bookController.findById);
