@@ -3,12 +3,13 @@ const express = require('express');
 const url = require("url");
 const router = express.Router();
 
+var testDB;
+var bookCollection;
+
 const books = new Map();
 const comments = new Map();
 let nextId = 1;
 let nextCommentId = 1;
-
-init();
 
 //GET books
 router.get('/books', ((req, res) =>
@@ -16,14 +17,14 @@ router.get('/books', ((req, res) =>
 ));
 
 //GET book by its id
-router.get('/books/:id', ((req, res) => {
-        const id = req.params.id;
-        const book = books.get(id);
+router.get('/books/:id', (async (req, res) => {
+        const bookId = req.params.id;
+        const book = await Book.find({id: bookId}).exec();
 
         if (!book) {
             res.sendStatus(404);
         } else {
-            getComments(book.id)
+            // getComments(book.id)
             res.json(book);
         }
     }
@@ -108,7 +109,7 @@ router.post('/comments/:bookId', (req, res) => {
                 score: req.body.score,
             };
 
-            addComment(comment,req.params.bookId);
+            addComment(comment, req.params.bookId);
             //TODO: revisar
             res.location(fullUrl(req));
             res.json(comment);
@@ -160,22 +161,11 @@ function getComments(bookId) {
     });
 }
 
-function init() {
-    addBook({
-        title: 'Don Quijote de la Mancha',
-        summary: 'Las andanzas de Don Quijote y Sancho Panza.',
-        postYear: 1700,
-        author: 'Miguel de Cervantes',
-        comments: []
-    })
-    addBook({
-        title: 'El principito',
-        summary: 'El principito es una novela corta y la obra más famosa del escritor y aviador francés Antoine de Saint-Exupéry',
-        postYear: 1943,
-        author: 'Antoine de Saint-Exupéry',
-        comments: []
-    })
+async function getBookById(bookId) {
+    return bookCollection.find({id: bookId}).toArray();
+}
 
+function init() {
     addComment({
         author: 'Andrea',
         text: 'Me ha gustado mucho este libro.',
