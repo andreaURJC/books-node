@@ -4,6 +4,7 @@ const mongoose = require('mongoose');
 const bookRouter = require("./router/bookRouter.js");
 const Book = require('./models/Book.js');
 const Comment = require('./models/Comment.js');
+const User = require('./models/User.js');
 
 const app = express();
 app.use(express.json());
@@ -25,8 +26,7 @@ mongoose.connect(mongoUrl, {
 });
 
 function initSomeBooks() {
-    Book.create(
-        {
+    Book.create({
             bookId: 1,
             title: 'El Principito',
             summary: 'El principito es una novela corta y la obra más famosa del escritor y aviador francés Antoine de Saint-Exupéry',
@@ -35,6 +35,7 @@ function initSomeBooks() {
             publisher: "Anaya",
             comments: []
         });
+
     Book.create(
         {
             bookId: 2,
@@ -53,12 +54,25 @@ function initSomeBooks() {
         text: "Me ha gustado mucho",
         score: 2
     });
+
     Comment.create({
         bookId: 2,
         commentId: 2,
         user: "Juanma",
         text: "Me ha gustado mucho, pero no lo recomiendo.",
         score: 5
+    });
+
+    User.create({
+        id: 1,
+        nick: "Andrea",
+        email: "andrea@test.com"
+    });
+
+    User.create({
+        id:2,
+        nick: "Juanma",
+        email: "juanma@test.com"
     });
 }
 
