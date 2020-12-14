@@ -80,20 +80,31 @@ bookRouter.route('/comments')
         });
     });
 
-bookRouter.route('/comments/:user')
+bookRouter.route('users/:userId/comments')
     //GET comments of an user
     .get(function (req, res) {
-        Comment.find({user: req.params.user}, function (err, comments) {
+        console.log('PRUEBA USER/COMMENTS');
+        User.findOne({id: req.params.userId}, function (err, user) {
+            console.log('FINDONE USER/COMMENTS');
             if (err) {
-                res.status(404).send("Cannot find any comments");
+                res.status(404).send("User not found");
             }
-            if (comments.length === 0) {
-                res.status(404).send("Cannot find any comments");
+            if (user) {
+                Comment.find({user: user.nick}, function (err, comments) {
+                    if (err) {
+                        res.status(404).send("Cannot find any comments");
+                    }
+                    if (comments.length === 0) {
+                        res.status(404).send("Cannot find any comments");
+                    } else {
+                        console.log('GET/comments/user')
+                        res.status(200).jsonp(comments);
+                    }
+                });
             } else {
-                console.log('GET/comments/user')
-                res.status(200).jsonp(comments);
+                res.status(404).send("User not found");
             }
-        });
+        })
     });
 
 bookRouter.route("/books/:bookId/comments")
