@@ -80,22 +80,17 @@ bookRouter.route('/comments')
         });
     });
 
-bookRouter.route('users/:userId/comments')
+bookRouter.route('/users/:userId/comments')
     //GET comments of an user
     .get(function (req, res) {
-        console.log('PRUEBA USER/COMMENTS');
         User.findOne({id: req.params.userId}, function (err, user) {
-            console.log('FINDONE USER/COMMENTS');
             if (err) {
                 res.status(404).send("User not found");
             }
             if (user) {
                 Comment.find({user: user.nick}, function (err, comments) {
-                    if (err) {
-                        res.status(404).send("Cannot find any comments");
-                    }
-                    if (comments.length === 0) {
-                        res.status(404).send("Cannot find any comments");
+                    if (err || comments.length === 0) {
+                        res.status(404).send("Comments not found");
                     } else {
                         console.log('GET/comments/user')
                         res.status(200).jsonp(comments);
@@ -124,13 +119,13 @@ bookRouter.route("/books/:bookId/comments")
                     }
                     commentId = count + 1;
 
-                    User.findOne({nick: req.body.user}, function (err, user) {
+                    User.findOne({nick: req.body.nick}, function (err, user) {
                         if(err) {
                             res.status(404).send("This user doesn't exist.");
                         }
                         if(user) {
                             const comment = new Comment({
-                                user: req.body.user,
+                                user: req.body.nick,
                                 text: req.body.text,
                                 score: req.body.score,
                                 commentId: commentId,
@@ -165,7 +160,7 @@ bookRouter.route("/books/:bookId/comments/:commentId")
             }
             if (book != null) {
                 //Comprueba si el comentario existe en base de datos
-                Comment.findOne({bookId: req.params.commentId}, function (err, comment) {
+                Comment.findOne({commentId: req.params.commentId}, function (err, comment) {
                     if (err) {
                         res.status(500).send("This comment doesn't exist.");
                     }
