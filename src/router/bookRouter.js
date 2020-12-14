@@ -231,9 +231,11 @@ bookRouter.route("/users/:nick")
                 res.status(404).send("User not found");
             }
         })
-    })
+    });
+
+bookRouter.route("/users/:userId")
     .patch(function (req, res) {
-        User.findOneAndUpdate({nick: req.params.nick}, {$set: {email: req.body.email}}, function (err, user) {
+        User.findOneAndUpdate({id: req.params.userId}, {$set: {email: req.body.email}},function (err, user) {
             if (err) {
                 res.status(404).send("Bad request");
             }
@@ -244,19 +246,19 @@ bookRouter.route("/users/:nick")
             }
         })
     })
-    .delete(function (req, res) {
-        User.findOne({nick: req.params.nick}, function (err, user) {
+    .delete(function (req,res) {
+        User.findOne({id: req.params.userId}, function (err, user) {
             if (err) {
                 res.status(404).send("Bad request");
             }
             if (user) {
-                Comment.find({user: req.params.nick}, function (err, comments) {
-                    if (comments.length === 0) {
+                Comment.find({user:user.nick}, function (err, comments) {
+                    if(comments.length === 0) {
                         user.delete(function (err, user) {
                             if (err) {
                                 res.status(500).send("Cannot delete this user");
                             }
-                            res.status(200).send("User deleted:" + req.params.nick);
+                            res.status(200).send("User deleted:" + req.params.userId);
                         });
                     } else {
                         res.status(500).send("User has comments and cannot be deleted");
