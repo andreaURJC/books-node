@@ -12,7 +12,7 @@ userRouter.route('/users/:userId/comments')
                 res.status(404).send("User not found");
             }
             if (user) {
-                Comment.find({user: user.nick}, function (err, comments) {
+                Comment.find({nick: user.nick}, function (err, comments) {
                     if (err || comments.length === 0) {
                         res.status(404).send("Comments not found");
                     } else {
