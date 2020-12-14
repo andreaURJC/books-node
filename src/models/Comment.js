@@ -2,9 +2,10 @@ const mongoose = require('mongoose');
 var commentSchema = new mongoose.Schema({
     bookId: Number,
     commentId: Number,
-    user: String,
     text: String,
-    score: Number
+    score: Number,
+    nick: String,
+    email: String
 }, {versionKey: false});
 
 //Definimos el modelo y el esquema

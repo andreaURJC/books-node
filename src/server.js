@@ -2,6 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 
 const bookRouter = require("./router/bookRouter.js");
+const userRouter = require("./router/userRouter.js");
 const Book = require('./models/Book.js');
 const Comment = require('./models/Comment.js');
 const User = require('./models/User.js');
@@ -9,6 +10,7 @@ const User = require('./models/User.js');
 const app = express();
 app.use(express.json());
 app.use(bookRouter);
+app.use(userRouter);
 
 const mongoUrl = "mongodb://localhost:27017/";
 mongoose.connect(mongoUrl, {
@@ -50,7 +52,8 @@ function initSomeBooks() {
     Comment.create({
         bookId: 1,
         commentId: 1,
-        user: "Andrea",
+        nick: "Andrea",
+        email: "andrea@test.com",
         text: "Me ha gustado mucho",
         score: 2
     });
@@ -58,7 +61,8 @@ function initSomeBooks() {
     Comment.create({
         bookId: 2,
         commentId: 2,
-        user: "Juanma",
+        nick: "Juanma",
+        email: "juanma@test.com",
         text: "Me ha gustado mucho, pero no lo recomiendo.",
         score: 5
     });
