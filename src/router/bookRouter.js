@@ -80,6 +80,22 @@ bookRouter.route('/comments')
         });
     });
 
+bookRouter.route('/comments/:user')
+    //GET comments of an user
+    .get(function (req, res) {
+        Comment.find({user: req.params.user}, function (err, comments) {
+            if (err) {
+                res.status(404).send("Cannot find any comments");
+            }
+            if (comments.length === 0) {
+                res.status(404).send("Cannot find any comments");
+            } else {
+                console.log('GET/comments/user')
+                res.status(200).jsonp(comments);
+            }
+        });
+    });
+
 bookRouter.route("/books/:bookId/comments")
     //POST comment at bookId
     .post(function (req, res) {
@@ -96,20 +112,31 @@ bookRouter.route("/books/:bookId/comments")
                         console.log("Cannot count docs");
                     }
                     commentId = count + 1;
-                    const comment = new Comment({
-                        user: req.body.user,
-                        text: req.body.text,
-                        score: req.body.score,
-                        commentId: commentId,
-                        bookId: req.params.bookId,
-                    });
-                    //Guarda el comentario
-                    comment.save(function (err, comment) {
-                        if (err) {
-                            res.status(500).send(err.message);
+
+                    User.findOne({nick: req.body.user}, function (err, user) {
+                        if(err) {
+                            res.status(404).send("This user doesn't exist.");
                         }
-                        res.status(200).jsonp(comment);
+                        if(user) {
+                            const comment = new Comment({
+                                user: req.body.user,
+                                text: req.body.text,
+                                score: req.body.score,
+                                commentId: commentId,
+                                bookId: req.params.bookId,
+                            });
+                            //Guarda el comentario
+                            comment.save(function (err, comment) {
+                                if (err) {
+                                    res.status(500).send(err.message);
+                                }
+                                res.status(200).jsonp(comment);
+                            })
+                        } else {
+                            res.status(404).send("This user doesn't exist.");
+                        }
                     })
+
                 })
             } else {
                 res.status(404).send("Book at id " + req.params.bookId + " not found");
@@ -206,7 +233,7 @@ bookRouter.route("/users/:nick")
         })
     })
     .patch(function (req, res) {
-        User.findOneAndUpdate({nick: req.params.nick}, {$set: {email: req.body.email}},function (err, user) {
+        User.findOneAndUpdate({nick: req.params.nick}, {$set: {email: req.body.email}}, function (err, user) {
             if (err) {
                 res.status(404).send("Bad request");
             }
@@ -217,19 +244,19 @@ bookRouter.route("/users/:nick")
             }
         })
     })
-    .delete(function (req,res) {
+    .delete(function (req, res) {
         User.findOne({nick: req.params.nick}, function (err, user) {
             if (err) {
                 res.status(404).send("Bad request");
             }
             if (user) {
-                Comment.find({user:req.params.nick}, function (err, comments) {
-                    if(comments.length === 0) {
+                Comment.find({user: req.params.nick}, function (err, comments) {
+                    if (comments.length === 0) {
                         user.delete(function (err, user) {
-                            if(err) {
+                            if (err) {
                                 res.status(500).send("Cannot delete this user");
                             }
-                                res.status(200).send("User deleted:" + req.params.nick);
+                            res.status(200).send("User deleted:" + req.params.nick);
                         });
                     } else {
                         res.status(500).send("User has comments and cannot be deleted");
