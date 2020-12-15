@@ -13,11 +13,17 @@ userRouter.route('/users/:userId/comments')
             }
             if (user) {
                 Comment.find({nick: user.nick}, function (err, comments) {
-                    if (err || comments.length === 0) {
+                    if (err) {
                         res.status(404).send("Comments not found");
                     } else {
-                        console.log('GET/comments/user')
-                        res.status(200).jsonp(comments);
+                        res.status(200).jsonp({comments: comments.map(comment => {
+                            return {
+                                id: comment.commentId,
+                                text: comment.text,
+                                score: comment.score,
+                                bookId: comment.bookId
+                            }
+                            })});
                     }
                 });
             } else {
@@ -101,7 +107,7 @@ userRouter.route("/users/:userId")
                 res.status(404).send("Bad request");
             }
             if (user) {
-                Comment.find({user:user.nick}, function (err, comments) {
+                Comment.find({nick:user.nick}, function (err, comments) {
                     if(comments.length === 0) {
                         user.delete(function (err, user) {
                             if (err) {

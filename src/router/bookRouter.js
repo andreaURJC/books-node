@@ -12,7 +12,11 @@ bookRouter.route('/books')
             if (err) {
                 res.status(404).send(err.message)
             }
-            let booksResponse = books.map(book => { return {bookId: book.bookId, title: book.title}});
+            let booksResponse = {
+                books: books.map(book => {
+                    return { bookId: book.bookId, title: book.title }
+                })
+            };
             res.status(200).jsonp(booksResponse);
         });
     })
@@ -61,7 +65,7 @@ bookRouter.route('/books/:bookId')
                     if (comments != null) {
                         book.comments = comments;
                         let bookResponse = {
-                            bookId: book.bookId,
+                            id: book.bookId,
                             title: book.title,
                             summary: book.summary,
                             author: book.author,
